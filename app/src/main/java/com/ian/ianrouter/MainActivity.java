@@ -16,14 +16,16 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RouteDemo.open("ian://test");
+                RouteDemo.getInstance().build("ian://test").withInt("int_key", 123).openWithBundle();
+//                RouteDemo.getInstance().build("ian://test?int_key=123").open();
             }
         });
 
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RouteDemo.open("ian://test_web");
+//                RouteDemo.getInstance().build("ian://test_web").withString("url", "https://www.baidu.com/").openWithBundle();
+                RouteDemo.getInstance().build("ian://test_web?url=https://www.baidu.com/").open();
             }
         });
     }

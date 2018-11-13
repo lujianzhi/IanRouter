@@ -2,6 +2,7 @@ package com.ian.ianrouter;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import com.ian.route_annotation.Route;
 
@@ -12,5 +13,9 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        int key = Integer.parseInt((String) getIntent().getExtras().get("int_key"));
+
+        TextView textView = findViewById(R.id.textView);
+        textView.setText("接受到的参数 : " + key);
     }
 }
