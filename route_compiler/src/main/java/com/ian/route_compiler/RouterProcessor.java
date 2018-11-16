@@ -45,13 +45,17 @@ public class RouterProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        //获取带有Route标注的元素集合
         Set<? extends Element> routeElements = roundEnv.getElementsAnnotatedWith(Route.class);
-
+        //"造类"
         TypeSpec typeSpec = processRouterTable(routeElements);
 
         if (typeSpec != null) {
             try {
-                JavaFile.builder("com.ian.ianrouter", typeSpec).build().writeTo(mFiler);
+                //把我们造出来的类，放到指定包名下面
+                JavaFile.builder("com.ian.ianrouter", typeSpec)
+                        .build()
+                        .writeTo(mFiler);
             } catch (IOException e) {
                 e.printStackTrace();
                 error(e.getMessage());
@@ -77,30 +81,32 @@ public class RouterProcessor extends AbstractProcessor {
     }
 
     private TypeSpec processRouterTable(Set<? extends Element> elements) {
-        //注意这里一定要做判空处理,因为apt会多次扫描项目所有文件包括javaPoet生成的文件.
-        //不做这步处理的话,第一次生成你需要的文件,第二次再进行扫描的时候,又会去生成文件,那时系统就会报一个异常,提示不能生成相同的文件
         if (elements == null || elements.size() == 0) {
             return null;
         }
+        //构建一个方法参数，emmmm，就是 HashMap<String,Class> activityMap
         ParameterizedTypeName mapTypeName = ParameterizedTypeName.get(ClassName.get(HashMap.class),
                 ClassName.get(String.class), ClassName.get(Class.class));
         ParameterSpec mapParameterSpec = ParameterSpec.builder(mapTypeName, "activityMap").build();
-        MethodSpec.Builder routerInitBuilder = MethodSpec.methodBuilder("initActivityMap")
+        //构建一个方法，方法名叫initActivityMap,是public static的，参数就是上面创建的参数
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("initActivityMap")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addParameter(mapParameterSpec);
 
+        //遍历带注解的元素
         for (Element element : elements) {
             Route route = element.getAnnotation(Route.class);
             String[] routerUrls = route.value();
+            //遍历注解的内容
             for (String url : routerUrls) {
-                //核心逻辑 将字符与类做映射关联
-                routerInitBuilder.addStatement("activityMap.put($S, $T.class)", url, ClassName.get((TypeElement) element));
+                //在方法里写语句，占位符里写数据，TypeElement指的是类元素，我们的注解是加在类上的
+                methodBuilder.addStatement("activityMap.put($S, $T.class)", url, ClassName.get((TypeElement) element));
             }
         }
-
+        //生成名叫AutoCreateIanRouterActivityMap的类，是public的，然后有一个我们创建的方法initActivityMap
         return TypeSpec.classBuilder("AutoCreateIanRouterActivityMap")
                 .addModifiers(Modifier.PUBLIC)
-                .addMethod(routerInitBuilder.build())
+                .addMethod(methodBuilder.build())
                 .build();
     }
 }
