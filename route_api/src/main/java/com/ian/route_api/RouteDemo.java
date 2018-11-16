@@ -30,8 +30,8 @@ public class RouteDemo {
     public void init(Application application) {
         mApplication = application;
         try {
-            //通过反射调用AutoCreateModuleActivityMap_app类的方法,并给activityMap赋值
-            Class clazz = Class.forName("com.ian.ianrouter.AutoCreateModuleActivityMap_app");
+            //通过反射调用AutoCreateIanRouterActivityMap类的方法,并给activityMap赋值
+            Class clazz = Class.forName("com.ian.ianrouter.AutoCreateIanRouterActivityMap");
             Method method = clazz.getMethod("initActivityMap", HashMap.class);
             method.invoke(null, activityMap);
             for (String key : activityMap.keySet()) {

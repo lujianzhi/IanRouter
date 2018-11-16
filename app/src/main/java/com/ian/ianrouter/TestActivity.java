@@ -13,7 +13,7 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        int key = Integer.parseInt((String) getIntent().getExtras().get("int_key"));
+        int key = getIntent().getExtras().getInt("int_key");
 
         TextView textView = findViewById(R.id.textView);
         textView.setText("接受到的参数 : " + key);

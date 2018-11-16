@@ -98,7 +98,7 @@ public class RouterProcessor extends AbstractProcessor {
             }
         }
 
-        return TypeSpec.classBuilder("AutoCreateModuleActivityMap_app")
+        return TypeSpec.classBuilder("AutoCreateIanRouterActivityMap")
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(routerInitBuilder.build())
                 .build();
