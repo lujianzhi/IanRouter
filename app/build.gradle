@@ -27,5 +27,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     api project(':route_annotation')
     api project(':route_api')
+    api project(':SPIInterfaceDemo')
+    api project(':SPIDemo')
     annotationProcessor project(':route_compiler')
 }

@@ -1,1 +1,1 @@
-include ':app', ':route_api', ':route_compiler', ':route_annotation'
+include ':app', ':route_api', ':route_compiler', ':route_annotation', ':SPIDemo', ':SPIInterfaceDemo'
